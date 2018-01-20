@@ -90,8 +90,7 @@ services:
 
     grafana:
         build: ./Containers/Grafana/
-        container_name: grafana
-        image: gjaminon/grafana
+        container_name: grafana        
         restart: unless-stopped
         ports:
             - '3000:3000'
@@ -100,8 +99,7 @@ services:
 
     grafana-config:
         build: ./Containers/Grafana-Config/
-        container_name: grafana-config
-        image: gjaminon/grafanaconfig
+        container_name: grafana-config        
         entrypoint: bash -c ./config.sh
         networks:
             - 'devops'
