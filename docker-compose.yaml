@@ -120,7 +120,7 @@ services:
         depends_on:
             - elasticsearch
         volumes:
-            - ./Config/kibana/:/usr/share/kibana/config
+            - ./Config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
         networks:
             - 'devops'
     elasticsearch-exporter:
