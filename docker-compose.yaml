@@ -1,0 +1,56 @@
+version: '3'
+
+volumes :
+    jenkins: {}
+    nexus: {}
+    gitlabData: {}
+    gitlabConfig: {}
+    gitlabLogs: {}
+
+
+services: 
+    jenkins: 
+        image: 'bitnami/jenkins:latest'
+        container_name: 'jenkins'
+        restart: 'unless-stopped'
+        ports: 
+           - '80:8080'
+           - '443:8443'
+        environment: 
+           - JENKINS_PASSWORD=JenkinsSecret
+           - JENKINS_USERNAME=admin
+        volumes: 
+           - 'jenkins:/bitnami'
+        networks: 
+           - 'devops'
+    nexus:
+        image: 'sonatype/nexus3:3.7.1'
+        container_name: 'nexus'
+        restart: 'unless-stopped'
+        ports: 
+        - '8081:8081'
+        volumes: 
+           - 'nexus:/nexus-data'
+        networks:
+           - 'devops'
+    gitlab:
+        image: 'gitlab/gitlab-ce:latest'
+        container_name: 'gitlab'
+        restart: 'unless-stopped'
+        
+                    
+        ports: 
+           - '81:80'
+           - '23:22'
+        volumes: 
+           - 'gitlabData:/etc/gitlab'
+           - 'gitlabLogs:/var/log/gitlab'
+           - 'gitlabConfig:/var/opt/gitlab'
+        networks:
+           - 'devops'
+        
+
+
+networks:
+    devops: 
+
