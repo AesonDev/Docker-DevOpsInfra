@@ -6,6 +6,7 @@ volumes :
     gitlabData: {}
     gitlabConfig: {}
     gitlabLogs: {}
+    prometheus: {}
 
 
 services: 
@@ -86,7 +87,7 @@ services:
             - '9090:9090'
         networks:
             - 'devops'
-            
+
     grafana:
         build: ./Containers/Grafana/
         container_name: grafana
