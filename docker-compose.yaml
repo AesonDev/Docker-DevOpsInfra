@@ -97,14 +97,7 @@ services:
         networks:
             - 'devops'
 
-    grafana-config:
-        build: ./Containers/Grafana-Config/
-        container_name: grafana-config        
-        entrypoint: bash -c ./config.sh
-        networks:
-            - 'devops'
-        depends_on:
-            - grafana
+  
         
     
 
