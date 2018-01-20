@@ -98,7 +98,7 @@ services:
         networks:
             - 'devops'
     elasticsearch:
-        build: ./Containers/elasticsearch/
+        build: ./Containers/ElasticSearch/
         container_name: elasticsearch
         restart: unless-stopped
         ports:
