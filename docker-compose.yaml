@@ -94,7 +94,7 @@ services:
         environment: 
             GF_DASHBOARDS_JSON_ENABLED: "true"
         volumes: 
-            - ./config/Grafana/dashboards/DockerAndHost.json:/var/lib/grafana/dashboards/DockerAndHost.json
+            - ./Config/Grafana/dashboards/DockerAndHost.json:/var/lib/grafana/dashboards/DockerAndHost.json
         networks:
             - 'devops'
     elasticsearch:
@@ -108,7 +108,7 @@ services:
             ES_JAVA_OPTS: "-Xmx256m -Xms256m"
         volumes:
             - 'elasticsearch:/usr/share/elasticsearch/data'
-            - ./config/ElasticSearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+            - ./Config/ElasticSearch/:/usr/share/elasticsearch/config/:ro
         networks:
             - 'devops'
     kibana:
