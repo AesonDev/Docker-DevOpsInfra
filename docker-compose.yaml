@@ -108,7 +108,7 @@ services:
             ES_JAVA_OPTS: "-Xmx256m -Xms256m"
         volumes:
             - 'elasticsearch:/usr/share/elasticsearch/data'
-            - ./Config/ElasticSearch/elasticsearch.yml:usr/share/elasticsearch/config/elasticsearch.yml
+            - ./Config/ElasticSearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
         networks:
             - 'devops'
     kibana:
