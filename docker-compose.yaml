@@ -138,8 +138,8 @@ services:
         container_name: logstash
         restart: unless-stopped
         volumes:
-            - ./Config/logstash/:/usr/share/logstash/config:ro
-            - ./Config/logstash/pipeline:/usr/share/logstash/pipeline
+            - ./Config/Logstash/:/usr/share/logstash/config:ro
+            - ./Config/Logstash/pipeline:/usr/share/logstash/pipeline
         ports:
             - "5000:5000"
         environment:
