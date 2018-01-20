@@ -7,11 +7,12 @@ volumes :
     gitlabConfig: {}
     gitlabLogs: {}
     prometheus: {}
+    elasticsearch: {}
 
 
 services: 
     jenkins: 
-        image: 'bitnami/jenkins:latest'
+        build: ./Containers/Jenkins/
         container_name: 'jenkins'
         restart: 'unless-stopped'
         ports: 
@@ -25,17 +26,17 @@ services:
         networks: 
            - 'devops'
     nexus:
-        image: 'sonatype/nexus3:3.7.1'
+        build: ./Containers/Nexus/
         container_name: 'nexus'
         restart: 'unless-stopped'
         ports: 
-        - '8081:8081'
+           - '8081:8081'
         volumes: 
            - 'nexus:/nexus-data'
         networks:
            - 'devops'
     gitlab:
-        image: 'gitlab/gitlab-ce:latest'
+        build: ./Containers/Gitlab/
         container_name: 'gitlab'
         restart: 'unless-stopped'                    
         ports: 
@@ -47,18 +48,16 @@ services:
            - 'gitlabConfig:/var/opt/gitlab'
         networks:
            - 'devops'
-
     node_exporter:
-        image: prom/node-exporter
-        container_name: node_exporter
+        build: ./Containers/NodeExporter/
+        container_name: infrahost_node_exporter
         restart: unless-stopped
         ports:
             - '9100:9100'
         networks:
             - 'devops'
-
     cadvisor:
-        image: google/cadvisor
+        build: ./Containers/CAdvisor/
         container_name: caAdvisor
         restart: unless-stopped
         volumes:
@@ -70,9 +69,8 @@ services:
             - '8082:8080'
         networks:
             - 'devops'
-    
     prometheus:
-        image: 'prom/prometheus:latest'
+        build: ./Containers/Prometheus/
         container_name: prometheus
         restart: unless-stopped
         volumes:
@@ -87,21 +85,82 @@ services:
             - '9090:9090'
         networks:
             - 'devops'
-
     grafana:
         build: ./Containers/Grafana/
         container_name: grafana        
         restart: unless-stopped
         ports:
             - '3000:3000'
+        environment: 
+            GF_DASHBOARDS_JSON_ENABLED: "true"
+        volumes: 
+            - ./config/Grafana/dashboards/DockerAndHost.json:/var/lib/grafana/dashboards/DockerAndHost.json
         networks:
             - 'devops'
-
-  
-        
-    
-
-
+    elasticsearch:
+        build: ./Containers/elasticsearch/
+        container_name: elasticsearch
+        restart: unless-stopped
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+        environment:
+            ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+        volumes:
+            - 'elasticsearch:/usr/share/elasticsearch/data'
+            - ./config/ElasticSearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+        networks:
+            - 'devops'
+    kibana:
+        build: ./Containers/Kibana/
+        container_name: kibana
+        restart: unless-stopped
+        ports:
+            - '5601:5601'
+        depends_on:
+            - elasticsearch
+        volumes:
+            - ./Config/kibana/:/usr/share/kibana/config:ro
+        networks:
+            - 'devops'
+    elasticsearch-exporter:
+        build: ./Containers/ElasticSearchExporter/
+        container_name: elasticsearch-exporter
+        command: 
+           - '-es.uri=http://elasticsearch:9200'
+        restart: unless-stopped
+        ports: 
+           - 9108:9108
+        networks:
+           - 'devops'
+    logstash:
+        build: ./Containers/Logstash/
+        container_name: logstash
+        restart: unless-stopped
+        volumes:
+            - ./Config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+            - ./Config/logstash/pipeline:/usr/share/logstash/pipeline:ro
+        ports:
+            - "5000:5000"
+        environment:
+            LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+        networks:
+            - 'devops'
+        depends_on:
+            - elasticsearch
+    logspout:
+        build: ./Containers/Logspout/
+        container_name: logspout
+        restart: unless-stopped
+        volumes:
+           - /var/run/docker.sock:/var/run/docker.sock:ro
+        environment:
+           ROUTE_URIS: logstash://logstash:5000
+           LOGSTASH_TAGS: docker-elk
+        networks:
+           - 'devops'
+        depends_on:
+           - logstash
 networks:
     devops: 
 
