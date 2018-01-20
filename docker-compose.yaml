@@ -36,9 +36,7 @@ services:
     gitlab:
         image: 'gitlab/gitlab-ce:latest'
         container_name: 'gitlab'
-        restart: 'unless-stopped'
-        
-                    
+        restart: 'unless-stopped'                    
         ports: 
            - '81:80'
            - '23:22'
@@ -49,6 +47,7 @@ services:
         networks:
            - 'devops'
         
+    
 
 
 networks:
