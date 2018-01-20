@@ -94,7 +94,7 @@ services:
         environment: 
             GF_DASHBOARDS_JSON_ENABLED: "true"
         volumes: 
-            - ./Config/Grafana/dashboards/DockerAndHost.json:/var/lib/grafana/dashboards/DockerAndHost.json
+            - ./Config/Grafana/dashboards/:/var/lib/grafana/dashboards/
         networks:
             - 'devops'
     elasticsearch:
@@ -138,7 +138,7 @@ services:
         container_name: logstash
         restart: unless-stopped
         volumes:
-            - ./Config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+            - ./Config/logstash/:/usr/share/logstash/config:ro
             - ./Config/logstash/pipeline:/usr/share/logstash/pipeline:ro
         ports:
             - "5000:5000"
