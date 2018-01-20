@@ -1,0 +1,10 @@
+global:
+   external_labels:
+       monitor: 'devops-monitor'
+
+scrape_configs:
+  - job_name: 'devops'
+    scrape_interval: 5s
+    static_configs: 
+       - targets: ['prometheus:9090','cadvisor:8082','node_exporter:9100']
+  

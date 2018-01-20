@@ -46,6 +46,66 @@ services:
            - 'gitlabConfig:/var/opt/gitlab'
         networks:
            - 'devops'
+
+    node_exporter:
+        image: prom/node-exporter
+        container_name: node_exporter
+        restart: unless-stopped
+        ports:
+            - '9100:9100'
+        networks:
+            - 'devops'
+
+    cadvisor:
+        image: google/cadvisor
+        container_name: caAdvisor
+        restart: unless-stopped
+        volumes:
+            - '/:/rootfs:ro'
+            - '/var/run:/var/run:rw'
+            - '/sys:/sys:ro'
+            - '/var/lib/docker/:/var/lib/docker:ro'
+        ports:
+            - '8082:8080'
+        networks:
+            - 'devops'
+    
+    prometheus:
+        image: 'prom/prometheus:latest'
+        container_name: prometheus
+        restart: unless-stopped
+        volumes:
+            - './Config/Prometheus/:/etc/prometheus'
+            - 'prometheus:/prometheus'
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yml'
+            - '--storage.tsdb.path=/prometheus'
+            - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+            - '--web.console.templates=/usr/share/prometheus/consoles'
+        ports:
+            - '9090:9090'
+        networks:
+            - 'devops'
+            
+    grafana:
+        build: ./Containers/Grafana/
+        container_name: grafana
+        image: gjaminon/grafana
+        restart: unless-stopped
+        ports:
+            - '3000:3000'
+        networks:
+            - 'devops'
+
+    grafana-config:
+        build: ./Containers/Grafana-Config/
+        container_name: grafana-config
+        image: gjaminon/grafanaconfig
+        entrypoint: bash -c ./config.sh
+        networks:
+            - 'devops'
+        depends_on:
+            - grafana
         
     
 
