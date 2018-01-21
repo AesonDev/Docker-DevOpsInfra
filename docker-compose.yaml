@@ -46,7 +46,8 @@ services:
     gitlab:
         build: ./Containers/Gitlab/
         container_name: 'gitlab'
-        restart: 'unless-stopped'                                  
+        restart: 'unless-stopped'
+        privileged: true                                  
         ports: 
            - '81:80'
            - '23:22'
