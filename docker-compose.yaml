@@ -53,7 +53,7 @@ services:
         volumes: 
            - 'gitlabData:/etc/gitlab'
            - 'gitlabLogs:/var/log/gitlab'
-           - 'gitlabConfig:/var/opt/gitlab:Z'
+           - 'gitlabConfig:/var/opt/gitlab'
         networks:
            - 'devops'
     node_exporter:
