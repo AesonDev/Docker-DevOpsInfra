@@ -12,7 +12,7 @@ volumes :
     gitlabLogs:
        driver: cloudstor:azure
     prometheus: 
-      driver: cloudstor:azure
+       driver: cloudstor:azure
     elasticsearch:
        driver: cloudstor:azure
 
