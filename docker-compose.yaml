@@ -46,9 +46,7 @@ services:
     gitlab:
         build: ./Containers/Gitlab/
         container_name: 'gitlab'
-        restart: 'unless-stopped'
-        command: 
-           - "sudo chmod 7770 /etc/gitlab/data"                    
+        restart: 'unless-stopped'                           
         ports: 
            - '81:80'
            - '23:22'
