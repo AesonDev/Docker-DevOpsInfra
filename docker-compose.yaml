@@ -16,7 +16,6 @@ services:
         restart: 'unless-stopped'
         ports: 
            - '82:8080'
-           - '443:8443'
         environment: 
            - JENKINS_PASSWORD=JenkinsSecret
            - JENKINS_USERNAME=admin
