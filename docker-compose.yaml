@@ -51,9 +51,9 @@ services:
            - '81:80'
            - '23:22'
         volumes: 
-           - 'gitlabData:/etc/gitlab'
-           - 'gitlabLogs:/var/log/gitlab'
-           - 'gitlabConfig:/var/opt/gitlab'
+           - 'gitlabData:/etc/gitlab:z'
+           - 'gitlabLogs:/var/log/gitlab:z'
+           - 'gitlabConfig:/var/opt/gitlab:z'
         networks:
            - 'devops'
     node_exporter:
