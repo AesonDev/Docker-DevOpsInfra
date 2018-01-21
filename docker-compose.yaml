@@ -1,13 +1,20 @@
 version: '3'
 
 volumes :
-    jenkins: {}
-    nexus: {}
-    gitlabData: {}
-    gitlabConfig: {}
-    gitlabLogs: {}
-    prometheus: {}
-    elasticsearch: {}
+    jenkins: 
+       driver: cloudstor:azure
+    nexus: 
+       driver: cloudstor:azure
+    gitlabData:
+       driver: cloudstor:azure
+    gitlabConfig: 
+       driver: cloudstor:azure
+    gitlabLogs:
+       driver: cloudstor:azure
+    prometheus: 
+      driver: cloudstor:azure
+    elasticsearch:
+       driver: cloudstor:azure
 
 
 services: 
